@@ -20,11 +20,10 @@ import {
   Info,
   Phone,
   Clock,
-  CreditCard,
-  ExternalLink,
-  Globe
+  ExternalLink
 } from "lucide-react";
 import { DraggableScroll } from "./DraggableScroll";
+import { BottomSheet } from "./BottomSheet";
 
 // Type definitions
 export interface Option {
@@ -440,7 +439,7 @@ export function MenuClient({ menu }: MenuClientProps) {
 
       <main>
         {/* Hero Section */}
-        <section className="relative w-full overflow-hidden h-72">
+        <section className="relative w-full overflow-hidden h-80">
           <div className="absolute inset-0">
             {menu.banner_url && (
               <Image 
@@ -456,14 +455,14 @@ export function MenuClient({ menu }: MenuClientProps) {
             <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/45 to-transparent"></div>
           </div>
           
-          <div className="relative h-full flex flex-col items-center justify-end text-center px-4 pb-8">
-            <div className="rounded-full bg-white border-4 border-primary overflow-hidden shadow-2xl flex items-center justify-center w-24 h-24 mb-3 transition-transform duration-300 hover:scale-105">
+          <div className="relative h-full flex flex-col items-center justify-end text-center px-4 pb-8 pt-12">
+            <div className="rounded-full bg-white border-4 border-primary overflow-hidden shadow-2xl flex items-center justify-center w-24 h-24 shrink-0 mb-3 transition-transform duration-300 hover:scale-105">
               {menu.logo_url && (
                 <Image 
                   alt={menu.name} 
                   width={96} 
                   height={96} 
-                  className="object-cover aspect-square" 
+                  className="object-cover aspect-square w-full h-full rounded-full" 
                   src={menu.logo_url} 
                 />
               )}
@@ -992,19 +991,16 @@ export function MenuClient({ menu }: MenuClientProps) {
       )}
 
       {/* --- ITEM DETAILS & VARIANTS BOTTOM-SHEET MODAL --- */}
-      {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center sm:justify-center">
-          {/* Backdrop overlay */}
-          <div 
-            onClick={() => setSelectedItem(null)}
-            className="absolute inset-0 bg-black/45 backdrop-blur-xs transition-opacity animate-fade-in"
-          ></div>
-          
-          {/* Modal Container */}
-          <div className="relative w-full max-h-[90vh] sm:max-w-lg bg-white rounded-t-4xl sm:rounded-4xl shadow-2xl flex flex-col z-10 animate-slide-up sm:animate-scale-up overflow-hidden">
-            
+      <BottomSheet
+        open={!!selectedItem}
+        onOpenChange={(open) => { if (!open) setSelectedItem(null); }}
+        title={selectedItem?.name}
+        variant="bare"
+      >
+        {selectedItem && (
+          <>
             {/* Header image and dismiss button */}
-            <div className="relative h-52 w-full bg-surface">
+            <div className="relative h-52 w-full bg-surface shrink-0">
               <Image alt={selectedItem.name} fill className="object-cover" src={selectedItem.image_url} />
               <button 
                 onClick={() => setSelectedItem(null)}
@@ -1015,7 +1011,7 @@ export function MenuClient({ menu }: MenuClientProps) {
             </div>
 
             {/* Modal Body content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+            <div className="flex-1 overflow-y-auto p-6 space-y-5 scrollbar-hidden">
               <div>
                 {selectedItem.badge && (
                   <span className="bg-primary-light text-primary text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider inline-block mb-2">
@@ -1100,7 +1096,7 @@ export function MenuClient({ menu }: MenuClientProps) {
             </div>
 
             {/* Modal Bottom control panel */}
-            <div className="p-6 border-t border-outline/50 bg-surface flex items-center justify-between gap-4">
+            <div className="p-6 border-t border-outline/50 bg-surface flex items-center justify-between gap-4 shrink-0">
               
               {/* Quantity selector controls */}
               <div className="flex items-center gap-3 bg-white border border-outline px-3 py-1.5 rounded-2xl shrink-0">
@@ -1132,27 +1128,23 @@ export function MenuClient({ menu }: MenuClientProps) {
                 </span>
               </button>
             </div>
-
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </BottomSheet>
 
       {/* --- BUSINESS INFO BOTTOM-SHEET / CENTERED MODAL ("VER MÁS") --- */}
-      {isInfoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center sm:justify-center">
-          {/* Backdrop overlay */}
-          <div 
-            onClick={() => setIsInfoModalOpen(false)}
-            className="absolute inset-0 bg-black/45 backdrop-blur-xs transition-opacity animate-fade-in"
-          ></div>
-          
-          {/* Modal Container */}
-          <div className="relative w-full max-h-[90vh] sm:max-w-lg bg-white rounded-t-4xl sm:rounded-4xl shadow-2xl flex flex-col z-10 animate-slide-up sm:animate-scale-up overflow-hidden">
-            
+      <BottomSheet
+        open={isInfoModalOpen}
+        onOpenChange={setIsInfoModalOpen}
+        title="Información del Negocio"
+        variant="bare"
+      >
+        {isInfoModalOpen && (
+          <>
             {/* Header banner */}
             <div className="relative h-28 w-full bg-linear-to-r from-primary to-secondary flex items-center justify-center shrink-0">
               {/* Blur pattern overlay */}
-              <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+              <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
               <h4 className="font-display font-black text-lg text-white drop-shadow-md">
                 Información del Negocio
               </h4>
@@ -1244,7 +1236,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                         href={menu.facebook_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2] text-[#1877F2] hover:text-white px-4 py-3 rounded-2xl border border-[#1877F2]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
+                        className="flex-1 min-w-30 flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2] text-[#1877F2] hover:text-white px-4 py-3 rounded-2xl border border-[#1877F2]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
                       >
                         <svg className="w-4.5 h-4.5 fill-current shrink-0" viewBox="0 0 24 24">
                           <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -1257,7 +1249,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                         href={menu.instagram_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-[#E4405F]/10 hover:bg-[#E4405F] text-[#E4405F] hover:text-white px-4 py-3 rounded-2xl border border-[#E4405F]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
+                        className="flex-1 min-w-30 flex items-center justify-center gap-2 bg-[#E4405F]/10 hover:bg-[#E4405F] text-[#E4405F] hover:text-white px-4 py-3 rounded-2xl border border-[#E4405F]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
                       >
                         <svg className="w-4.5 h-4.5 fill-none stroke-current stroke-2 shrink-0" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -1272,7 +1264,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                         href={menu.tiktok_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000] text-[#000000] hover:text-white px-4 py-3 rounded-2xl border border-[#000000]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
+                        className="flex-1 min-w-30 flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000] text-[#000000] hover:text-white px-4 py-3 rounded-2xl border border-[#000000]/15 transition-all font-display text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
                       >
                         <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
                           <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.09-1.5-1.12-.83-1.92-2.07-2.22-3.47-.02 2.44-.01 4.88-.02 7.32-.03 1.83-.52 3.73-1.74 5.09-1.39 1.56-3.64 2.4-5.75 2.13-2.61-.33-4.88-2.39-5.38-4.99-.61-3.15 1.34-6.44 4.43-7.07.7-.14 1.43-.16 2.14-.07v4.09c-.64-.09-1.31-.05-1.91.17-1.12.41-1.89 1.56-1.83 2.75.05 1.25.99 2.33 2.22 2.47 1.23.14 2.51-.62 2.86-1.8.1-.34.12-.7.11-1.05-.02-4.14-.01-8.28-.02-12.43z" />
@@ -1361,10 +1353,9 @@ export function MenuClient({ menu }: MenuClientProps) {
                 Entendido
               </button>
             </div>
-
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </BottomSheet>
 
     </div>
   );
