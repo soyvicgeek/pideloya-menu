@@ -2,13 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Los dueños pegan la URL de sus fotos desde el panel, así que el host
+    // no se puede conocer de antemano. Next sigue optimizando y sirviendo
+    // las imágenes desde nuestro dominio; no se ejecuta nada del origen.
     remotePatterns: [
-      { protocol: 'https', hostname: 'images.unsplash.com' },
-      { protocol: 'https', hostname: 'img.freepik.com' },
-      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
-      { protocol: 'https', hostname: 'tvpacifico.mx' },
-      { protocol: 'https', hostname: 'thumbs.dreamstime.com' },
+      { protocol: "https", hostname: "**" },
     ],
+    // Un menú son puras fotos de platillos: conviene cachearlas fuerte.
+    minimumCacheTTL: 60 * 60 * 24 * 7,
   },
 };
 

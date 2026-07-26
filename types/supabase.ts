@@ -487,6 +487,7 @@ export type Database = {
           id: string
           max_featured: number
           max_items: number
+          max_menus: number
           name: string
           price_monthly: number
           price_yearly: number
@@ -500,6 +501,7 @@ export type Database = {
           id?: string
           max_featured?: number
           max_items?: number
+          max_menus?: number
           name: string
           price_monthly?: number
           price_yearly?: number
@@ -513,6 +515,7 @@ export type Database = {
           id?: string
           max_featured?: number
           max_items?: number
+          max_menus?: number
           name?: string
           price_monthly?: number
           price_yearly?: number
@@ -535,6 +538,7 @@ export type Database = {
           lng: string | null
           logo_url: string | null
           name: string
+          phone: string | null
           plan_id: string | null
           primary_color: string | null
           secondary_color: string | null
@@ -557,6 +561,7 @@ export type Database = {
           lng?: string | null
           logo_url?: string | null
           name: string
+          phone?: string | null
           plan_id?: string | null
           primary_color?: string | null
           secondary_color?: string | null
@@ -579,6 +584,7 @@ export type Database = {
           lng?: string | null
           logo_url?: string | null
           name?: string
+          phone?: string | null
           plan_id?: string | null
           primary_color?: string | null
           secondary_color?: string | null
@@ -608,6 +614,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      dchplm_current_client_id: { Args: never; Returns: string }
       slugify: { Args: { v_text: string }; Returns: string }
     }
     Enums: {

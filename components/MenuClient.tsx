@@ -70,7 +70,10 @@ export interface MenuData {
   logo_url: string;
   banner_url: string;
   address: string;
+  /** Número con WhatsApp activo. Vacío si el negocio no tiene. */
   whatsapp_phone: string;
+  /** Teléfono para llamadas (fijo o celular). Puede no tener WhatsApp. */
+  phone: string;
   isOpen: boolean;
   featured: MenuItem[];
   categories: Category[];
@@ -100,6 +103,20 @@ interface MenuClientProps {
   menu: MenuData;
 }
 
+/**
+ * FASE 1: el menú es sólo de consulta. El carrito, el checkout y el envío del
+ * pedido por WhatsApp quedan apagados con esta bandera — no se borró nada.
+ *
+ * Se apaga con una bandera y no con comentarios porque los bloques del carrito
+ * ya traen comentarios {/* ... *\/} adentro, y en JSX no se pueden anidar.
+ * Además así el código sigue pasando por TypeScript y no se pudre.
+ *
+ * Para reactivarlo en la fase 2: poner true. Vuelven el botón flotante del
+ * carrito, el cajón lateral, el formulario de checkout, el selector de
+ * cantidad, las instrucciones especiales y la selección de variantes.
+ */
+const CARRITO_HABILITADO = false;
+
 // Icon mapper for dynamic categories
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Percent,
@@ -107,6 +124,19 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Flame,
   Utensils
 };
+
+/** Número del negocio en formato wa.me (México por defecto). */
+function buildWhatsappUrl(phone: string): string | null {
+  const clean = phone.replace(/\D/g, "");
+  if (!clean) return null;
+  return `https://wa.me/${clean.startsWith("52") ? clean : `52${clean}`}`;
+}
+
+/** Enlace tel: para el teléfono de llamadas. */
+function buildTelUrl(phone: string): string | null {
+  const clean = phone.replace(/[^\d+]/g, "");
+  return clean ? `tel:${clean}` : null;
+}
 
 export function MenuClient({ menu }: MenuClientProps) {
   // --- States ---
@@ -152,6 +182,15 @@ export function MenuClient({ menu }: MenuClientProps) {
       "--secondary-light": `${menu.secondary_color || "#743b8c"}15`,
     } as React.CSSProperties;
   }, [menu.primary_color, menu.secondary_color]);
+
+  // --- Contacto del negocio (botón flotante) ---
+  // WhatsApp manda; si el negocio sólo dejó teléfono de llamadas, el botón
+  // marca en vez de abrir un chat que no existe.
+  const whatsappUrl = useMemo(
+    () => buildWhatsappUrl(menu.whatsapp_phone || ""),
+    [menu.whatsapp_phone]
+  );
+  const telUrl = useMemo(() => buildTelUrl(menu.phone || ""), [menu.phone]);
 
   // --- Cart Calculations ---
   const cartTotal = useMemo(() => {
@@ -199,7 +238,7 @@ export function MenuClient({ menu }: MenuClientProps) {
 
   // --- Item Selection & Option Modal Logic ---
   const handleItemClick = (item: MenuItem) => {
-    if (!item.variants || item.variants.length === 0) {
+    if (CARRITO_HABILITADO && (!item.variants || item.variants.length === 0)) {
       // Quick add if no variants/options required
       addToCartDirectly(item);
     } else {
@@ -208,9 +247,11 @@ export function MenuClient({ menu }: MenuClientProps) {
       setModalQuantity(1);
       setModalNotes("");
       
-      // Initialize selections with default values
+      // Initialize selections with default values.
+      // Sin carrito también entramos aquí con platillos que no traen variantes,
+      // porque el modal ahora sirve para ver el detalle.
       const initialSelections: Record<string, string[]> = {};
-      item.variants.forEach(variant => {
+      item.variants?.forEach(variant => {
         if (variant.is_required && !variant.multi_select && variant.options.length > 0) {
           // Auto-select first option if required & single select
           initialSelections[variant.id] = [variant.options[0].id];
@@ -493,7 +534,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                   : "bg-rose-500/20 border-rose-500/40 text-rose-400"
               }`}>
                 <span className={`w-2 h-2 rounded-full ${menu.isOpen ? "bg-emerald-400 animate-pulse" : "bg-rose-400"}`}></span>
-                <span>{menu.isOpen ? "Abierto Ahora" : "Cerrado temporalmente"}</span>
+                <span>{menu.isOpen ? "Abierto Ahora" : "Cerrado Ahora"}</span>
               </div>
             </div>
           </div>
@@ -711,8 +752,32 @@ export function MenuClient({ menu }: MenuClientProps) {
         </div>
       </main>
 
-      {/* Floating Action Button (Cart) */}
-      {cart.length > 0 && (
+      {/* Botón flotante de contacto: WhatsApp si lo hay, si no llamar.
+          Si el negocio no dejó ningún número, no se pinta nada. */}
+      {whatsappUrl ? (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Escribir a ${menu.name} por WhatsApp`}
+          className="fixed bottom-8 right-6 z-40 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-xl shadow-black/15 active:scale-95 hover:scale-105 transition-all duration-150 cursor-pointer text-white"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488" />
+          </svg>
+        </a>
+      ) : telUrl ? (
+        <a
+          href={telUrl}
+          aria-label={`Llamar a ${menu.name}`}
+          className="fixed bottom-8 right-6 z-40 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-xl shadow-primary/20 active:scale-95 hover:scale-105 transition-all duration-150 cursor-pointer text-white"
+        >
+          <Phone className="w-7 h-7" />
+        </a>
+      ) : null}
+
+      {/* Floating Action Button (Cart) — FASE 2 */}
+      {CARRITO_HABILITADO && cart.length > 0 && (
         <button 
           onClick={() => { setIsCartOpen(true); setShowCheckoutForm(false); }}
           className="fixed bottom-8 right-6 z-40 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-xl shadow-primary/20 active:scale-95 hover:scale-105 transition-all duration-150 cursor-pointer hover:bg-opacity-95 text-white"
@@ -724,8 +789,8 @@ export function MenuClient({ menu }: MenuClientProps) {
         </button>
       )}
 
-      {/* --- CART DRAWER / SIDE SHEET --- */}
-      {isCartOpen && (
+      {/* --- CART DRAWER / SIDE SHEET --- FASE 2 */}
+      {CARRITO_HABILITADO && isCartOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           {/* Overlay backdrop */}
           <div 
@@ -1024,6 +1089,21 @@ export function MenuClient({ menu }: MenuClientProps) {
                 <p className="text-foreground/50 text-xs font-normal mt-1.5 leading-relaxed">
                   {selectedItem.description}
                 </p>
+
+                {/* Con el carrito apagado el precio ya no aparece en el botón
+                    de "Agregar", así que se muestra aquí. */}
+                {!CARRITO_HABILITADO && (
+                  <div className="mt-3 flex items-baseline gap-2">
+                    {selectedItem.variants && selectedItem.variants.length > 0 && (
+                      <span className="text-[9px] text-foreground/45 font-bold uppercase tracking-wider">
+                        Desde
+                      </span>
+                    )}
+                    <span className="font-display font-black text-primary text-2xl">
+                      ${selectedItem.price.toFixed(2)}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Dynamic Variants & options list */}
@@ -1040,7 +1120,13 @@ export function MenuClient({ menu }: MenuClientProps) {
                         </span>
                       )}
                       <span className="text-[10px] text-foreground/40 font-bold uppercase tracking-wider">
-                        {variant.multi_select ? "Selección múltiple" : "Elige uno"}
+                        {!CARRITO_HABILITADO
+                          ? variant.multi_select
+                            ? "Varias opciones"
+                            : "Una opción"
+                          : variant.multi_select
+                            ? "Selección múltiple"
+                            : "Elige uno"}
                       </span>
                     </div>
                   </div>
@@ -1050,24 +1136,33 @@ export function MenuClient({ menu }: MenuClientProps) {
                     {variant.options.map((opt) => {
                       const isSelected = (modalSelections[variant.id] || []).includes(opt.id);
                       return (
-                        <div 
+                        <div
                           key={opt.id}
-                          onClick={() => handleOptionToggle(variant.id, opt.id, variant.multi_select)}
-                          className={`flex justify-between items-center px-4 py-3 rounded-2xl border transition-all cursor-pointer select-none active:scale-[0.99] ${
-                            isSelected 
-                              ? "bg-primary-light border-primary text-primary" 
-                              : "bg-surface border-outline/50 hover:border-foreground/15 text-foreground/75"
+                          onClick={CARRITO_HABILITADO
+                            ? () => handleOptionToggle(variant.id, opt.id, variant.multi_select)
+                            : undefined}
+                          className={`flex justify-between items-center px-4 py-3 rounded-2xl border transition-all select-none ${
+                            CARRITO_HABILITADO ? "cursor-pointer active:scale-[0.99]" : ""
+                          } ${
+                            isSelected
+                              ? "bg-primary-light border-primary text-primary"
+                              : `bg-surface border-outline/50 text-foreground/75 ${CARRITO_HABILITADO ? "hover:border-foreground/15" : ""}`
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            {/* Checkbox or Radio icon */}
-                            <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${
-                              isSelected 
-                                ? "bg-primary border-primary text-white scale-105 shadow-sm shadow-primary/15" 
-                                : "bg-white border-outline"
-                            }`}>
-                              {isSelected && <Check className="w-3.5 h-3.5 stroke-3" />}
-                            </div>
+                            {/* Checkbox or Radio icon — sin carrito no hay nada que
+                                seleccionar, así que el cuadro se cambia por un punto. */}
+                            {CARRITO_HABILITADO ? (
+                              <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${
+                                isSelected
+                                  ? "bg-primary border-primary text-white scale-105 shadow-sm shadow-primary/15"
+                                  : "bg-white border-outline"
+                              }`}>
+                                {isSelected && <Check className="w-3.5 h-3.5 stroke-3" />}
+                              </div>
+                            ) : (
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary/45 shrink-0" />
+                            )}
                             <span className="text-xs font-bold">{opt.name}</span>
                           </div>
                           {opt.additional_price > 0 && (
@@ -1082,8 +1177,8 @@ export function MenuClient({ menu }: MenuClientProps) {
                 </div>
               ))}
 
-              {/* Special Instructions (Notes for item) */}
-              <div className="border-t border-outline/35 pt-4.5">
+              {/* Special Instructions (Notes for item) — FASE 2 */}
+              <div className={`border-t border-outline/35 pt-4.5 ${CARRITO_HABILITADO ? "" : "hidden"}`}>
                 <label className="block text-[11px] font-extrabold text-foreground/60 uppercase tracking-wider mb-1.5">Instrucciones especiales</label>
                 <textarea 
                   rows={2}
@@ -1095,7 +1190,8 @@ export function MenuClient({ menu }: MenuClientProps) {
               </div>
             </div>
 
-            {/* Modal Bottom control panel */}
+            {/* Modal Bottom control panel — cantidad y "Agregar al carrito": FASE 2 */}
+            {CARRITO_HABILITADO && (
             <div className="p-6 border-t border-outline/50 bg-surface flex items-center justify-between gap-4 shrink-0">
               
               {/* Quantity selector controls */}
@@ -1128,6 +1224,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                 </span>
               </button>
             </div>
+            )}
           </>
         )}
       </BottomSheet>
@@ -1202,25 +1299,47 @@ export function MenuClient({ menu }: MenuClientProps) {
                     </div>
                   </div>
 
-                  {/* Phone row */}
-                  <div className="flex gap-3.5 items-start border-t border-outline/35 pt-4">
-                    <div className="bg-secondary/10 text-secondary p-2 rounded-xl shrink-0">
-                      <Phone className="w-4.5 h-4.5" />
+                  {/* WhatsApp row — sólo si el negocio tiene WhatsApp */}
+                  {whatsappUrl && (
+                    <div className="flex gap-3.5 items-start border-t border-outline/35 pt-4">
+                      <div className="bg-secondary/10 text-secondary p-2 rounded-xl shrink-0">
+                        <Phone className="w-4.5 h-4.5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="block text-[10px] text-foreground/40 font-bold uppercase tracking-wider">WhatsApp</span>
+                        <span className="block text-xs font-bold text-foreground mt-0.5 leading-relaxed">{menu.whatsapp_phone}</span>
+                        <a
+                          href={whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-[10px] text-secondary font-black uppercase tracking-wider mt-1.5 hover:underline cursor-pointer"
+                        >
+                          <span>Escribir por WhatsApp</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="block text-[10px] text-foreground/40 font-bold uppercase tracking-wider">Teléfono / WhatsApp</span>
-                      <span className="block text-xs font-bold text-foreground mt-0.5 leading-relaxed">+{menu.whatsapp_phone}</span>
-                      <a 
-                        href={`https://wa.me/${menu.whatsapp_phone.replace(/\D/g, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[10px] text-secondary font-black uppercase tracking-wider mt-1.5 hover:underline cursor-pointer"
-                      >
-                        <span>Escribir por WhatsApp</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
+                  )}
+
+                  {/* Teléfono de llamadas — puede convivir con el de WhatsApp */}
+                  {telUrl && (
+                    <div className="flex gap-3.5 items-start border-t border-outline/35 pt-4">
+                      <div className="bg-primary/10 text-primary p-2 rounded-xl shrink-0">
+                        <Phone className="w-4.5 h-4.5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="block text-[10px] text-foreground/40 font-bold uppercase tracking-wider">Teléfono</span>
+                        <span className="block text-xs font-bold text-foreground mt-0.5 leading-relaxed">{menu.phone}</span>
+                        <a
+                          href={telUrl}
+                          className="inline-flex items-center gap-1 text-[10px] text-primary font-black uppercase tracking-wider mt-1.5 hover:underline cursor-pointer"
+                        >
+                          <span>Llamar</span>
+                          <Phone className="w-3 h-3" />
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
