@@ -23,7 +23,7 @@ El dueño se registra, captura sus platillos desde el panel administrador y en
 minutos su menú queda publicado en su propia dirección:
 
 ```
-menu.cdhidalgo.com/tacos-el-guero
+menu.cdhidalgo.com/[nombre-del-negocio]
 ```
 
 Ese enlace lo pega en su perfil de Facebook, lo manda por WhatsApp o lo imprime

@@ -209,7 +209,13 @@ export const getMenuBySlug = cache(async (slug: string): Promise<MenuData | null
   };
 });
 
-/** Slugs activos, para prerenderizar los menús en el build. */
+/**
+ * Slugs activos.
+ *
+ * Ya NO se usa para prerenderizar: los menús se dan de alta a cualquier hora y
+ * se renderizan bajo demanda. Se queda porque es justo lo que necesita un
+ * `app/sitemap.ts` cuando lo agreguemos.
+ */
 export async function getActiveMenuSlugs(): Promise<string[]> {
   const { data, error } = await supabase
     .from("dchplm_menus")
