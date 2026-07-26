@@ -11,6 +11,20 @@
   --surface: #fcf9f8;
   --surface-container: #f0eded;
   --outline: #e5e7eb;
+
+  /* Naranja de marca de Pídelo Ya, la misma del panel admin.
+     Es FIJA: no la pisa el color que elige cada negocio, porque se usa en
+     páginas nuestras (como /unete), no dentro de un menú. */
+  --brand-50: #fff7ed;
+  --brand-100: #ffedd5;
+  --brand-200: #fed7aa;
+  --brand-300: #fdba74;
+  --brand-400: #fb923c;
+  --brand-500: #f97316;
+  --brand-600: #ea580c;
+  --brand-700: #c2410c;
+  --brand-800: #9a3412;
+  --brand-900: #7c2d12;
 }
 
 @theme inline {
@@ -21,7 +35,18 @@
   --color-surface: var(--surface);
   --color-surface-container: var(--surface-container);
   --color-outline: var(--outline);
-  
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
   --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 }

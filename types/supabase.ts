@@ -477,6 +477,68 @@ export type Database = {
           },
         ]
       }
+      dchplm_menu_solicitudes: {
+        Row: {
+          apellido_materno: string
+          apellido_paterno: string
+          atendida_en: string | null
+          client_id: string | null
+          correo: string
+          created_at: string
+          estado: string
+          facebook_url: string | null
+          id: string
+          instagram_url: string | null
+          negocio: string
+          nombre: string
+          notas: string | null
+          telefono: string
+          tiktok_url: string | null
+        }
+        Insert: {
+          apellido_materno: string
+          apellido_paterno: string
+          atendida_en?: string | null
+          client_id?: string | null
+          correo: string
+          created_at?: string
+          estado?: string
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          negocio: string
+          nombre: string
+          notas?: string | null
+          telefono: string
+          tiktok_url?: string | null
+        }
+        Update: {
+          apellido_materno?: string
+          apellido_paterno?: string
+          atendida_en?: string | null
+          client_id?: string | null
+          correo?: string
+          created_at?: string
+          estado?: string
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          negocio?: string
+          nombre?: string
+          notas?: string | null
+          telefono?: string
+          tiktok_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dchplm_menu_solicitudes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "dchplm_menu_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dchplm_menu_subscription_plans: {
         Row: {
           active: boolean
