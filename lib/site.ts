@@ -13,3 +13,31 @@ export const SITE_URL = (
 ).replace(/\/+$/, "");
 
 export const SITE_NAME = "Pídelo Ya";
+
+/**
+ * Comunidad de De Cd Hidalgo Pal Mundo. Vive aquí y no repartido por la
+ * landing para que actualizar un número sea un solo cambio.
+ */
+export const REDES = [
+  {
+    nombre: "Facebook",
+    seguidores: "40 mil+",
+    url: "https://www.facebook.com/gociudadhidalgo",
+  },
+  {
+    nombre: "Instagram",
+    seguidores: "110 mil+",
+    url: "https://www.instagram.com/gociudadhidalgo",
+  },
+  {
+    nombre: "TikTok",
+    seguidores: "6 mil+",
+    url: "https://www.tiktok.com/@gociudadhidalgo",
+  },
+] as const;
+
+/**
+ * Suma de seguidores, no de personas únicas: mucha gente nos sigue en más de
+ * una red. Por eso se dice "seguidores" y no "personas".
+ */
+export const SEGUIDORES_TOTALES = "150 mil+";
