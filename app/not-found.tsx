@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Store } from "lucide-react";
 
 import { SiteFooter } from "@/components/SiteFooter";
 
-export const metadata: Metadata = {
-  title: "Página no encontrada",
-  robots: { index: false },
-};
+/*
+ * Sin `export const metadata`: el App Router lo ignora en `not-found`, así que
+ * el título lo pone el layout. Y no hace falta `noindex`, porque la respuesta
+ * ya sale con código 404 y los buscadores no indexan eso.
+ */
 
 /**
  * El 404 del sitio, que también atiende los menús inexistentes.
