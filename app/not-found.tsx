@@ -1,45 +1,82 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { FileQuestion, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Store } from "lucide-react";
 
+import { SiteFooter } from "@/components/SiteFooter";
+
+export const metadata: Metadata = {
+  title: "Página no encontrada",
+  robots: { index: false },
+};
+
+/**
+ * El 404 del sitio, que también atiende los menús inexistentes.
+ *
+ * De lejos el caso más común es alguien tecleando mal la dirección de un
+ * negocio, o abriendo un menú que se dio de baja. Por eso el texto habla de
+ * eso y no de un "error", y por eso la segunda salida es dar de alta un
+ * negocio: quien llegó buscando un menú suele ser justo el público de /unete.
+ */
 export default function NotFound() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[70vh] px-6 py-12 text-center bg-surface font-sans relative overflow-hidden">
-      
-      {/* Decorative Blur Background Blob */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/5 blur-[80px] pointer-events-none"></div>
+    <div className="flex min-h-dvh flex-col bg-surface">
+      <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
+        {/* Mancha de color, muy tenue: da profundidad sin competir con el texto. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500/10 blur-[90px]"
+        />
 
-      <div className="relative z-10 max-w-md w-full flex flex-col items-center">
-        
-        {/* Icon Container */}
-        <div className="bg-primary/10 text-primary p-5 rounded-3xl mb-6 flex items-center justify-center shadow-xs">
-          <FileQuestion className="w-12 h-12" />
+        <div className="relative z-10 flex w-full max-w-md flex-col items-center">
+          <Image
+            src="/mimenu.svg"
+            alt="MiMENÚ"
+            width={96}
+            height={96}
+            className="mb-8 size-24"
+            priority
+          />
+
+          {/*
+            El 404 va grande y en el naranja de marca, como cifra y no como
+            icono: es lo que le dice a alguien técnico qué pasó, sin robarle
+            el lugar al mensaje en español.
+          */}
+          <p className="font-display text-7xl leading-none font-black tracking-tight text-brand-500/25 sm:text-8xl">
+            404
+          </p>
+
+          <h1 className="font-display mt-4 text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+            Aquí no hay menú
+          </h1>
+
+          <p className="mt-3 text-sm leading-relaxed font-medium text-foreground/55">
+            La dirección que abriste no existe, cambió de nombre o el negocio
+            dio de baja su menú. Revisa que esté bien escrita.
+          </p>
+
+          <div className="mt-8 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
+            <Link
+              href="/"
+              className="font-display inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-600/20 transition-all duration-150 hover:bg-brand-700 active:scale-95"
+            >
+              <ArrowLeft className="size-4" />
+              Ir al inicio
+            </Link>
+
+            <Link
+              href="/unete"
+              className="font-display inline-flex items-center justify-center gap-2 rounded-2xl border border-outline bg-white px-6 py-3.5 text-sm font-bold text-foreground/70 shadow-xs transition-all duration-150 hover:border-brand-400 hover:text-brand-600 active:scale-95"
+            >
+              <Store className="size-4" />
+              Registrar mi negocio
+            </Link>
+          </div>
         </div>
+      </main>
 
-        {/* 404 Badge */}
-        <span className="text-[10px] font-extrabold text-primary tracking-widest uppercase bg-primary-light px-3 py-1 rounded-full mb-3">
-          Error 404
-        </span>
-
-        {/* Title */}
-        <h1 className="font-display font-black text-3xl sm:text-4xl text-foreground tracking-tight mb-3">
-          Página No Encontrada
-        </h1>
-
-        {/* Message */}
-        <p className="text-foreground/50 text-sm font-medium leading-relaxed mb-8">
-          Lo sentimos, el menú o la sección que buscas no existe, ha cambiado de dirección o se encuentra temporalmente desactivada.
-        </p>
-
-        {/* Return Button */}
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-2 bg-primary hover:bg-primary/95 text-white font-display text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all active:scale-95 duration-150 cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver al Inicio</span>
-        </Link>
-
-      </div>
+      <SiteFooter />
     </div>
   );
 }
