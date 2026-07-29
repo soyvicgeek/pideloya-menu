@@ -36,15 +36,19 @@ export default function UnetePage() {
       <main className="mx-auto w-full max-w-md px-5 pt-10 pb-4">
         {/* Encabezado */}
         <div className="text-center">
-          <div className="relative mx-auto mb-5 h-9 w-32">
-            <Image
-              src="/logo-white.png"
-              alt={SITE_NAME}
-              fill
-              className="object-contain brightness-0"
-              priority
-            />
-          </div>
+          {/*
+            El SVG ya trae el naranja de la marca, así que no lleva
+            `brightness-0` —eso teñía de negro el PNG blanco—. Y con el tamaño
+            fijo del viewBox, `fill` y `sizes` sobran.
+          */}
+          <Image
+            src="/mimenu-horizontal.svg"
+            alt={SITE_NAME}
+            width={192}
+            height={64}
+            className="mx-auto mb-5 h-16 w-auto"
+            priority
+          />
 
           <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-brand-700">
             Gratis para tu negocio

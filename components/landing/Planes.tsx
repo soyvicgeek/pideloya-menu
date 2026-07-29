@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, MessageCircle, Star } from "lucide-react";
+import { Check, Clock, MessageCircle, Star } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { whatsappConMensaje } from "@/components/SiteFooter";
@@ -12,37 +12,47 @@ const dinero = new Intl.NumberFormat("es-MX", {
 });
 
 /**
+ * Un beneficio del plan. `proximamente` marca lo que todavía no se entrega:
+ * listarlo con palomita, como el resto, sería prometer algo que no existe.
+ */
+type Beneficio = { texto: string; proximamente?: boolean };
+
+/**
  * Los beneficios de difusión no viven en la base porque no son límites del
  * sistema, son trabajo nuestro: reseñas, mapa y publicaciones en redes.
  */
-function beneficios(plan: PlanPublico): string[] {
+function beneficios(plan: PlanPublico): Beneficio[] {
   const platillos = plan.platillosIlimitados
     ? "Platillos ilimitados"
-    : `Hasta ${plan.maxPlatillos} platillos con foto y precio`;
+    : `Hasta ${plan.maxPlatillos} platillos, por menú con foto y precio`;
 
   const menus =
     plan.maxMenus === 1
       ? "1 menú con tu propia dirección"
       : `${plan.maxMenus} ${plan.nombre === "Premium" ? "sucursales" : "menús"}, cada uno con su dirección`;
 
-  const base = [platillos, menus, "Código QR único para tus mesas", "Contacto directo por WhatsApp"];
+  const base: Beneficio[] = [
+    { texto: platillos },
+    { texto: menus },
+    { texto: "Código QR único para tus mesas", proximamente: true },
+    { texto: "Contacto directo por WhatsApp" },
+  ];
 
   if (plan.nombre === "Pro") {
     return [
       ...base,
-      "Reseña mensual en reel, publicada en Facebook, Instagram, TikTok y en cdhidalgo.com/comer",
-      "Tu negocio en el mapa de la ciudad",
-      "Sin anuncios de terceros en tu menú",
+      { texto: "Tu negocio en el mapa de la ciudad" },
+      { texto: "1 publicación semanal en nuestras redes sobre tu negocio" },
+      { texto: "Sin anuncios de terceros en tu menú" },
     ];
   }
 
   if (plan.nombre === "Premium") {
     return [
       ...base,
-      "Reseña mensual en reel, publicada en Facebook, Instagram, TikTok y en cdhidalgo.com/comer",
-      "Tu negocio en el mapa de la ciudad",
-      "2 publicaciones semanales en nuestras redes",
-      "Sin anuncios de terceros en tu menú",
+      { texto: "Tu negocio en el mapa de la ciudad" },
+      { texto: "2 publicaciones semanales en nuestras redes sobre tu negocio" },
+      { texto: "Sin anuncios de terceros en tu menú" },
     ];
   }
 
@@ -89,17 +99,41 @@ function TarjetaPlan({ plan, destacado }: { plan: PlanPublico; destacado: boolea
       )}
 
       <ul className="mt-6 flex-1 space-y-2.5">
-        {beneficios(plan).map((texto) => (
+        {beneficios(plan).map(({ texto, proximamente }) => (
           <li key={texto} className="flex items-start gap-2.5">
+            {/*
+              Reloj en vez de palomita para lo que aún no se entrega: la
+              palomita dice "esto ya lo tienes", y aquí todavía no.
+            */}
             <span
               className={cn(
                 "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full",
-                destacado ? "bg-brand-100 text-brand-700" : "bg-surface-container text-foreground/60",
+                proximamente
+                  ? "bg-surface-container text-foreground/35"
+                  : destacado
+                    ? "bg-brand-100 text-brand-700"
+                    : "bg-surface-container text-foreground/60",
               )}
             >
-              <Check className="size-3 stroke-3" />
+              {proximamente ? (
+                <Clock className="size-3 stroke-3" />
+              ) : (
+                <Check className="size-3 stroke-3" />
+              )}
             </span>
-            <span className="text-sm font-medium leading-snug text-foreground/70">{texto}</span>
+            <span
+              className={cn(
+                "flex flex-wrap items-center gap-1.5 text-sm leading-snug font-medium",
+                proximamente ? "text-foreground/45" : "text-foreground/70",
+              )}
+            >
+              {texto}
+              {proximamente && (
+                <span className="rounded-full bg-surface-container px-2 py-0.5 text-[9px] font-extrabold tracking-wider text-foreground/45 uppercase">
+                  Muy pronto
+                </span>
+              )}
+            </span>
           </li>
         ))}
       </ul>

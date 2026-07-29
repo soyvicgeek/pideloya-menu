@@ -20,7 +20,7 @@ import { Hero } from "@/components/landing/Hero";
 import { Planes } from "@/components/landing/Planes";
 import { SiteFooter, whatsappConMensaje } from "@/components/SiteFooter";
 
-const TITULO = "Mi Menú · Menús digitales para negocios de Ciudad Hidalgo";
+const TITULO = "Mi Menú -- Menú digital para tu negocio gratis!";
 const DESCRIPCION =
   "Publica el menú de tu negocio en línea, gratis. Tu propia dirección, código QR y contacto por WhatsApp. Por De Cd Hidalgo Pal Mundo.";
 
@@ -261,15 +261,18 @@ export default async function Home() {
         {/* Cierre */}
         <section className="px-5 pb-14">
           <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-brand-600 px-6 py-12 text-center shadow-lg shadow-brand-600/20">
-            {/* Aquí el logo va en blanco, como fue diseñado */}
-            <span className="relative mx-auto mb-6 block h-9 w-32">
-              <Image
-                src="/logo-white.png"
-                alt="De Cd Hidalgo Pal Mundo"
-                fill
-                className="object-contain"
-              />
-            </span>
+            {/*
+              Aquí el bloque va en el naranja de marca, así que el logo tiene
+              que ser blanco: `brightness-0 invert` deja cualquier color en
+              blanco puro, y evita tener que mantener un segundo archivo.
+            */}
+            <Image
+              src="/mimenu-horizontal.svg"
+              alt="MiMENÚ"
+              width={144}
+              height={48}
+              className="mx-auto mb-6 h-12 w-auto brightness-0 invert"
+            />
 
             <h2 className="font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
               Tu negocio merece que lo encuentren

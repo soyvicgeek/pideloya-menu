@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Work_Sans } from "next/font/google";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -18,11 +18,18 @@ export const metadata: Metadata = {
   // etiquetas Open Graph salen inservibles para Facebook y WhatsApp.
   metadataBase: new URL(SITE_URL),
   title: SITE_NAME,
-  description: "Menús Digitales para Negocios",
+  description: "Tu menu al alcance de un click. Escanea el QR y pide lo que quieras.",
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
     locale: "es_MX",
+    images: [OG_IMAGE],
+  },
+  // Lo hereda cualquier página que no defina el suyo. El menú de un negocio sí
+  // lo define: ahí manda su portada, no la nuestra.
+  twitter: {
+    card: "summary_large_image",
+    images: [OG_IMAGE.url],
   },
 };
 

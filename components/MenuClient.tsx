@@ -480,12 +480,26 @@ export function MenuClient({ menu }: MenuClientProps) {
 
       <main>
         {/* Hero Section */}
+        {/*
+          Sin portada, el color de marca del propio negocio hace de fondo. No se
+          pone aquí una imagen genérica: el héroe lleva encima su logo y su
+          nombre, y una foto de archivo —o peor, publicidad nuestra— haría que
+          el menú de un cliente pareciera el de alguien más.
+        */}
         <section className="relative w-full overflow-hidden h-80">
-          <div className="absolute inset-0">
+          <div
+            className="absolute inset-0"
+            style={
+              menu.banner_url
+                ? undefined
+                : { backgroundColor: menu.primary_color }
+            }
+          >
             {menu.banner_url && (
               <Image 
                 alt="Banner de la tienda" 
                 fill 
+                sizes="100vw"
                 className="object-cover scale-105 filter blur-[0.5px]" 
                 src={menu.banner_url} 
                 priority 
@@ -646,6 +660,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                     <Image 
                       alt={item.name} 
                       fill 
+                      sizes="250px"
                       className="object-cover transition-transform duration-300 hover:scale-103" 
                       src={item.image_url} 
                     />
@@ -705,6 +720,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                         <Image 
                           alt={item.name} 
                           fill 
+                          sizes="(max-width: 640px) 33vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           className="object-cover transition-transform duration-300 group-hover:scale-103" 
                           src={item.image_url} 
                         />
@@ -833,7 +849,7 @@ export function MenuClient({ menu }: MenuClientProps) {
                     return (
                       <div key={cartItem.id} className="flex gap-4 bg-surface p-3.5 rounded-2xl border border-outline/50">
                         <div className="w-16 h-16 relative rounded-xl overflow-hidden bg-white shrink-0 border border-outline/30">
-                          <Image alt={cartItem.item.name} fill className="object-cover" src={cartItem.item.image_url} />
+                          <Image alt={cartItem.item.name} fill sizes="64px" className="object-cover" src={cartItem.item.image_url} />
                         </div>
                         <div className="flex-1 flex flex-col justify-between min-w-0">
                           <div>
@@ -1066,7 +1082,7 @@ export function MenuClient({ menu }: MenuClientProps) {
           <>
             {/* Header image and dismiss button */}
             <div className="relative h-52 w-full bg-surface shrink-0">
-              <Image alt={selectedItem.name} fill className="object-cover" src={selectedItem.image_url} />
+              <Image alt={selectedItem.name} fill sizes="(max-width: 640px) 100vw, 640px" className="object-cover" src={selectedItem.image_url} />
               <button 
                 onClick={() => setSelectedItem(null)}
                 className="absolute top-4 right-4 bg-black/35 hover:bg-black/55 text-white p-2 rounded-full backdrop-blur-md transition-colors cursor-pointer"

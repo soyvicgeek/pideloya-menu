@@ -15,6 +15,23 @@ export const SITE_URL = (
 export const SITE_NAME = "Pídelo Ya";
 
 /**
+ * Portada para redes sociales.
+ *
+ * Se usa en la landing y como respaldo cuando un negocio comparte su menú sin
+ * haber subido logo ni portada: mejor la marca que un enlace pelón.
+ *
+ * Facebook y WhatsApp esperan 1200x630. Esta mide 1787x880, casi la misma
+ * proporción, así que se recorta un poco de los lados y nada importante queda
+ * fuera.
+ */
+export const OG_IMAGE = {
+  url: `${SITE_URL}/og-menu.webp`,
+  width: 1787,
+  height: 880,
+  alt: "MiMENÚ · tu menú, a un click",
+} as const;
+
+/**
  * Comunidad de De Cd Hidalgo Pal Mundo. Vive aquí y no repartido por la
  * landing para que actualizar un número sea un solo cambio.
  */
@@ -26,7 +43,7 @@ export const REDES = [
   },
   {
     nombre: "Instagram",
-    seguidores: "110 mil+",
+    seguidores: "1100 +",
     url: "https://www.instagram.com/gociudadhidalgo",
   },
   {

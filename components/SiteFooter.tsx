@@ -85,12 +85,18 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-outline/60 bg-white px-6 py-10">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-5">
-        <Link href="/" className="relative h-8 w-28 opacity-80 transition hover:opacity-100">
+        {/*
+          El SVG ya trae el naranja de la marca, así que aquí no va `brightness-0`
+          —eso existía para teñir de negro el PNG blanco—. Y al ser cuadrado y
+          de tamaño fijo, tampoco hace falta `fill` ni `sizes`.
+        */}
+        <Link href="/" className="opacity-80 transition hover:opacity-100">
           <Image
-            src="/logo-white.png"
-            alt="De Cd Hidalgo Pal Mundo"
-            fill
-            className="object-contain brightness-0"
+            src="/mimenu.svg"
+            alt="MiMENÚ"
+            width={64}
+            height={64}
+            className="size-16"
           />
         </Link>
 

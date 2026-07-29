@@ -29,27 +29,21 @@ export function Hero() {
         )}
       >
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-5 py-3">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="relative h-7 w-24 shrink-0">
-              <Image
-                src="/logo-white.png"
-                alt="De Cd Hidalgo Pal Mundo"
-                fill
-                className={cn(
-                  "object-contain transition-[filter] duration-300",
-                  scrolled && "brightness-0",
-                )}
-                priority
-              />
-            </span>
-            <span
-              className={cn(
-                "hidden text-sm font-black tracking-tight transition-colors duration-300 sm:inline",
-                scrolled ? "text-foreground" : "text-white",
-              )}
-            >
-              Mi Menú
-            </span>
+          {/*
+            Sin filtro: el naranja de la marca se lee igual sobre la foto
+            oscura del inicio que sobre el fondo claro al bajar. El PNG
+            anterior sí lo necesitaba, porque era blanco y desaparecía en
+            cuanto el encabezado se volvía claro.
+          */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/mimenu-horizontal.svg"
+              alt="MiMENÚ"
+              width={120}
+              height={40}
+              className="h-10 w-auto shrink-0"
+              priority
+            />
           </Link>
 
           <nav className="ml-auto flex items-center gap-1.5">

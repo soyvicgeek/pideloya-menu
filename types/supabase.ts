@@ -52,6 +52,7 @@ export type Database = {
       }
       dchplm_eat_categories: {
         Row: {
+          deleted_at: string | null
           created_at: string | null
           emoji: string | null
           id: string
@@ -59,6 +60,7 @@ export type Database = {
           title: string
         }
         Insert: {
+          deleted_at?: string | null
           created_at?: string | null
           emoji?: string | null
           id?: string
@@ -66,6 +68,7 @@ export type Database = {
           title: string
         }
         Update: {
+          deleted_at?: string | null
           created_at?: string | null
           emoji?: string | null
           id?: string
@@ -76,6 +79,7 @@ export type Database = {
       }
       dchplm_eat_clients: {
         Row: {
+          deleted_at: string | null
           active: boolean
           address: string | null
           category_id: string | null
@@ -91,6 +95,7 @@ export type Database = {
           phone: string | null
         }
         Insert: {
+          deleted_at?: string | null
           active?: boolean
           address?: string | null
           category_id?: string | null
@@ -106,6 +111,7 @@ export type Database = {
           phone?: string | null
         }
         Update: {
+          deleted_at?: string | null
           active?: boolean
           address?: string | null
           category_id?: string | null
@@ -132,18 +138,21 @@ export type Database = {
       }
       dchplm_eat_clients_categories: {
         Row: {
+          deleted_at: string | null
           created_at: string
           id: string
           name: string | null
           slug: string | null
         }
         Insert: {
+          deleted_at?: string | null
           created_at?: string
           id?: string
           name?: string | null
           slug?: string | null
         }
         Update: {
+          deleted_at?: string | null
           created_at?: string
           id?: string
           name?: string | null
@@ -153,6 +162,7 @@ export type Database = {
       }
       dchplm_eat_reviews: {
         Row: {
+          deleted_at: string | null
           active: boolean | null
           category_id: string
           client_id: string | null
@@ -169,6 +179,7 @@ export type Database = {
           video_id: string | null
         }
         Insert: {
+          deleted_at?: string | null
           active?: boolean | null
           category_id: string
           client_id?: string | null
@@ -185,6 +196,7 @@ export type Database = {
           video_id?: string | null
         }
         Update: {
+          deleted_at?: string | null
           active?: boolean | null
           category_id?: string
           client_id?: string | null
@@ -219,6 +231,8 @@ export type Database = {
       }
       dchplm_menu_categories: {
         Row: {
+          deleted_at: string | null
+          orden_grupo: number
           active: boolean
           created_at: string | null
           id: string
@@ -226,6 +240,8 @@ export type Database = {
           name: string
         }
         Insert: {
+          deleted_at?: string | null
+          orden_grupo?: number
           active?: boolean
           created_at?: string | null
           id?: string
@@ -233,6 +249,8 @@ export type Database = {
           name: string
         }
         Update: {
+          deleted_at?: string | null
+          orden_grupo?: number
           active?: boolean
           created_at?: string | null
           id?: string
@@ -241,41 +259,9 @@ export type Database = {
         }
         Relationships: []
       }
-      dchplm_menu_category_assignments: {
-        Row: {
-          category_id: string
-          display_order: number
-          menu_id: string
-        }
-        Insert: {
-          category_id: string
-          display_order?: number
-          menu_id: string
-        }
-        Update: {
-          category_id?: string
-          display_order?: number
-          menu_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dchplm_menu_category_assignments_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "dchplm_menu_categories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dchplm_menu_category_assignments_menu_id_fkey"
-            columns: ["menu_id"]
-            isOneToOne: false
-            referencedRelation: "dchplm_menus"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       dchplm_menu_client_subscriptions: {
         Row: {
+          deleted_at: string | null
           amount_paid: number
           billing_period: string
           client_id: string
@@ -287,6 +273,7 @@ export type Database = {
           start_date: string
         }
         Insert: {
+          deleted_at?: string | null
           amount_paid?: number
           billing_period: string
           client_id: string
@@ -298,6 +285,7 @@ export type Database = {
           start_date: string
         }
         Update: {
+          deleted_at?: string | null
           amount_paid?: number
           billing_period?: string
           client_id?: string
@@ -334,6 +322,11 @@ export type Database = {
       }
       dchplm_menu_clients: {
         Row: {
+          deleted_at: string | null
+          acceso_activo: boolean
+          age: number | null
+          ape_mat: string | null
+          ape_pat: string | null
           auth_user_id: string | null
           created_at: string | null
           email: string
@@ -341,6 +334,11 @@ export type Database = {
           name: string
         }
         Insert: {
+          deleted_at?: string | null
+          acceso_activo?: boolean
+          age?: number | null
+          ape_mat?: string | null
+          ape_pat?: string | null
           auth_user_id?: string | null
           created_at?: string | null
           email: string
@@ -348,6 +346,11 @@ export type Database = {
           name: string
         }
         Update: {
+          deleted_at?: string | null
+          acceso_activo?: boolean
+          age?: number | null
+          ape_mat?: string | null
+          ape_pat?: string | null
           auth_user_id?: string | null
           created_at?: string | null
           email?: string
@@ -358,6 +361,7 @@ export type Database = {
       }
       dchplm_menu_item_variant_options: {
         Row: {
+          deleted_at: string | null
           additional_price: number
           display_order: number
           id: string
@@ -365,6 +369,7 @@ export type Database = {
           variant_id: string
         }
         Insert: {
+          deleted_at?: string | null
           additional_price?: number
           display_order?: number
           id?: string
@@ -372,6 +377,7 @@ export type Database = {
           variant_id: string
         }
         Update: {
+          deleted_at?: string | null
           additional_price?: number
           display_order?: number
           id?: string
@@ -390,6 +396,7 @@ export type Database = {
       }
       dchplm_menu_item_variants: {
         Row: {
+          deleted_at: string | null
           display_order: number
           id: string
           is_required: boolean
@@ -398,6 +405,7 @@ export type Database = {
           name: string
         }
         Insert: {
+          deleted_at?: string | null
           display_order?: number
           id?: string
           is_required?: boolean
@@ -406,6 +414,7 @@ export type Database = {
           name: string
         }
         Update: {
+          deleted_at?: string | null
           display_order?: number
           id?: string
           is_required?: boolean
@@ -425,6 +434,8 @@ export type Database = {
       }
       dchplm_menu_items: {
         Row: {
+          deleted_at: string | null
+          image_path: string | null
           active: boolean
           base_price: number
           category_id: string | null
@@ -437,6 +448,8 @@ export type Database = {
           name: string
         }
         Insert: {
+          deleted_at?: string | null
+          image_path?: string | null
           active?: boolean
           base_price?: number
           category_id?: string | null
@@ -449,6 +462,8 @@ export type Database = {
           name: string
         }
         Update: {
+          deleted_at?: string | null
+          image_path?: string | null
           active?: boolean
           base_price?: number
           category_id?: string | null
@@ -479,6 +494,7 @@ export type Database = {
       }
       dchplm_menu_solicitudes: {
         Row: {
+          deleted_at: string | null
           apellido_materno: string
           apellido_paterno: string
           atendida_en: string | null
@@ -496,6 +512,7 @@ export type Database = {
           tiktok_url: string | null
         }
         Insert: {
+          deleted_at?: string | null
           apellido_materno: string
           apellido_paterno: string
           atendida_en?: string | null
@@ -513,6 +530,7 @@ export type Database = {
           tiktok_url?: string | null
         }
         Update: {
+          deleted_at?: string | null
           apellido_materno?: string
           apellido_paterno?: string
           atendida_en?: string | null
@@ -541,6 +559,7 @@ export type Database = {
       }
       dchplm_menu_subscription_plans: {
         Row: {
+          deleted_at: string | null
           active: boolean
           allow_social_links: boolean
           can_customize_brand: boolean
@@ -555,6 +574,7 @@ export type Database = {
           price_yearly: number
         }
         Insert: {
+          deleted_at?: string | null
           active?: boolean
           allow_social_links?: boolean
           can_customize_brand?: boolean
@@ -569,6 +589,7 @@ export type Database = {
           price_yearly?: number
         }
         Update: {
+          deleted_at?: string | null
           active?: boolean
           allow_social_links?: boolean
           can_customize_brand?: boolean
@@ -586,6 +607,10 @@ export type Database = {
       }
       dchplm_menus: {
         Row: {
+          deleted_at: string | null
+          banner_path: string | null
+          giro_id: string | null
+          logo_path: string | null
           active: boolean
           address: string | null
           banner_url: string | null
@@ -609,6 +634,10 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
+          deleted_at?: string | null
+          banner_path?: string | null
+          giro_id?: string | null
+          logo_path?: string | null
           active?: boolean
           address?: string | null
           banner_url?: string | null
@@ -632,6 +661,10 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
+          deleted_at?: string | null
+          banner_path?: string | null
+          giro_id?: string | null
+          logo_path?: string | null
           active?: boolean
           address?: string | null
           banner_url?: string | null

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MenuClient } from "@/components/MenuClient";
+import { SiteFooter } from "@/components/SiteFooter";
 import { getMenuBySlug } from "@/lib/menu";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -42,11 +43,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     menu.description || `Consulta el menú de ${menu.name} en Ciudad Hidalgo, Michoacán.`;
 
-  // La portada manda; si el negocio no subió banner, se usa el logo.
-  const image = menu.banner_url || menu.logo_url;
-  const images = image
-    ? [{ url: image, alt: `Portada de ${menu.name}` }]
-    : undefined;
+  /*
+   * La portada del negocio manda, luego su logo. Si no tiene ninguna de las
+   * dos, se cae a la imagen de la marca: un enlace sin vista previa parece
+   * roto en WhatsApp, y eso lo abre menos gente.
+   */
+  const propia = menu.banner_url || menu.logo_url;
+  const images = propia
+    ? [{ url: propia, alt: `Portada de ${menu.name}` }]
+    : [OG_IMAGE];
+  const image = propia || OG_IMAGE.url;
 
   return {
     title: `${menu.name} · Menú`,
@@ -62,10 +68,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images,
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: menu.name,
       description,
-      images: image ? [image] : undefined,
+      images: [image],
     },
   };
 }
@@ -76,5 +82,20 @@ export default async function MenuPage({ params }: PageProps) {
 
   if (!menu) notFound();
 
-  return <MenuClient menu={menu} />;
+  return (
+    <>
+      <MenuClient menu={menu} />
+      {/*
+       * El pie va aquí y no dentro de MenuClient: ese es un componente de
+       * cliente enorme, y el pie es estático. Fuera se renderiza en el
+       * servidor y no engorda el paquete que descarga el celular.
+       *
+       * El padding de abajo deja libre el botón flotante de WhatsApp, que va
+       * fijo en la esquina y taparía los iconos de redes.
+       */}
+      <div className="pb-24">
+        <SiteFooter />
+      </div>
+    </>
+  );
 }
