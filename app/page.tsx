@@ -14,7 +14,7 @@ import {
   Video,
 } from "lucide-react";
 
-import { REDES, SITE_NAME, SITE_URL } from "@/lib/site";
+import { OG_IMAGE, REDES, SITE_NAME, SITE_URL } from "@/lib/site";
 import { getPlanesPublicos, PLANES_RESPALDO } from "@/lib/planes";
 import { Hero } from "@/components/landing/Hero";
 import { Planes } from "@/components/landing/Planes";
@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     locale: "es_MX",
     title: TITULO,
     description: DESCRIPCION,
+    // Va repetida aunque el layout ya la declare: Next reemplaza el bloque
+    // `openGraph` entero cuando una página define el suyo, no lo fusiona campo
+    // por campo. Sin esta línea, la landing sale sin og:image.
+    images: [OG_IMAGE],
   },
 };
 

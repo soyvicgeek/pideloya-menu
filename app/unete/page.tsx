@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Check } from "lucide-react";
 
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import { UneteForm } from "./UneteForm";
 import { SocialFooter } from "./SocialFooter";
 
@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     locale: "es_MX",
     title: TITULO,
     description: DESCRIPCION,
+    // Igual que en la landing: definir `openGraph` aquí reemplaza el del
+    // layout completo, así que la imagen hay que repetirla.
+    images: [OG_IMAGE],
   },
 };
 

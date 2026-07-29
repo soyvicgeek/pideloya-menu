@@ -20,14 +20,16 @@ export const SITE_NAME = "Pídelo Ya";
  * Se usa en la landing y como respaldo cuando un negocio comparte su menú sin
  * haber subido logo ni portada: mejor la marca que un enlace pelón.
  *
- * Facebook y WhatsApp esperan 1200x630. Esta mide 1787x880, casi la misma
- * proporción, así que se recorta un poco de los lados y nada importante queda
- * fuera.
+ * Va en JPG y no en WebP a propósito: el rastreador de Facebook no renderiza
+ * WebP en `og:image`, y el enlace termina sin vista previa. El WebP se queda en
+ * public para cualquier otro uso.
+ *
+ * Mide exactamente 1200x630, que es lo que esperan Facebook y WhatsApp.
  */
 export const OG_IMAGE = {
-  url: `${SITE_URL}/og-menu.webp`,
-  width: 1787,
-  height: 880,
+  url: `${SITE_URL}/og-menu.jpg`,
+  width: 1200,
+  height: 630,
   alt: "MiMENÚ · tu menú, a un click",
 } as const;
 
