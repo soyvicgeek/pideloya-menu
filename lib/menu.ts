@@ -13,6 +13,13 @@ import type {
 /** Platillos sin foto: evita que <Image> reciba un src vacío. */
 export const PLACEHOLDER_IMAGE = "/placeholder-dish.png";
 
+/**
+ * El naranja de la casa. Es el color que la base le fija a todo menú cuyo plan
+ * no incluye personalizarlo, así que un `primary_color` vacío ya sólo puede ser
+ * una fila anterior a esa regla. Cae aquí para que se vea igual que las demás.
+ */
+export const COLOR_MARCA = "#ff5023";
+
 /** Bucket para platillos sin categoría, o con una que se retiró. */
 const UNCATEGORIZED_ID = "sin-categoria";
 
@@ -192,7 +199,7 @@ export const getMenuBySlug = cache(async (slug: string): Promise<MenuData | null
   return {
     name: menuRow.name,
     description: menuRow.description ?? "",
-    primary_color: menuRow.primary_color ?? "#F01766",
+    primary_color: menuRow.primary_color ?? COLOR_MARCA,
     secondary_color: menuRow.secondary_color ?? "#743b8c",
     logo_url: resolverImagen(menuRow.logo_path, menuRow.logo_url) ?? "",
     banner_url: resolverImagen(menuRow.banner_path, menuRow.banner_url) ?? "",

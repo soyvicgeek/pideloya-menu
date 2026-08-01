@@ -176,9 +176,9 @@ export function MenuClient({ menu }: MenuClientProps) {
   // --- Dynamic Primary/Secondary Custom Colors ---
   const dynamicStyles = useMemo(() => {
     return {
-      "--primary": menu.primary_color || "#F01766",
+      "--primary": menu.primary_color || "#ff5023",
       "--secondary": menu.secondary_color || "#743b8c",
-      "--primary-light": `${menu.primary_color || "#F01766"}15`, // opacity for backgrounds
+      "--primary-light": `${menu.primary_color || "#ff5023"}15`, // opacity for backgrounds
       "--secondary-light": `${menu.secondary_color || "#743b8c"}15`,
     } as React.CSSProperties;
   }, [menu.primary_color, menu.secondary_color]);
