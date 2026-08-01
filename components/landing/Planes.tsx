@@ -11,16 +11,9 @@ const dinero = new Intl.NumberFormat("es-MX", {
   maximumFractionDigits: 0,
 });
 
-/**
- * Un beneficio del plan. `proximamente` marca lo que todavía no se entrega:
- * listarlo con palomita, como el resto, sería prometer algo que no existe.
- */
 type Beneficio = { texto: string; proximamente?: boolean };
 
-/**
- * Los beneficios de difusión no viven en la base porque no son límites del
- * sistema, son trabajo nuestro: reseñas, mapa y publicaciones en redes.
- */
+
 function beneficios(plan: PlanPublico): Beneficio[] {
   const platillos = plan.platillosIlimitados
     ? "Platillos ilimitados"
@@ -29,13 +22,14 @@ function beneficios(plan: PlanPublico): Beneficio[] {
   const menus =
     plan.maxMenus === 1
       ? "1 menú con tu propia dirección"
-      : `${plan.maxMenus} ${plan.nombre === "Premium" ? "sucursales" : "menús"}, cada uno con su dirección`;
+      : `${plan.maxMenus} ${plan.nombre === "Premium" ? "menús" : "menús"}, cada uno con su propia dirección y redes sociales`;
 
   const base: Beneficio[] = [
     { texto: platillos },
     { texto: menus },
     { texto: "Código QR único para tus mesas", proximamente: true },
     { texto: "Contacto directo por WhatsApp" },
+    { texto: "Actualizaciones periódicas gratis" },
   ];
 
   if (plan.nombre === "Pro") {
@@ -101,10 +95,6 @@ function TarjetaPlan({ plan, destacado }: { plan: PlanPublico; destacado: boolea
       <ul className="mt-6 flex-1 space-y-2.5">
         {beneficios(plan).map(({ texto, proximamente }) => (
           <li key={texto} className="flex items-start gap-2.5">
-            {/*
-              Reloj en vez de palomita para lo que aún no se entrega: la
-              palomita dice "esto ya lo tienes", y aquí todavía no.
-            */}
             <span
               className={cn(
                 "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full",
