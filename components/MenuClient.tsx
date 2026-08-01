@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { DraggableScroll } from "./DraggableScroll";
 import { BottomSheet } from "./BottomSheet";
+import { LOGO_MIMENU } from "@/lib/site";
 
 // Type definitions
 export interface Option {
@@ -172,6 +173,10 @@ export function MenuClient({ menu }: MenuClientProps) {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
+
+  /* Todavía no sube su logo y se está viendo el de MiMENÚ. Cambia cómo se
+     encuadra: el suyo llena el círculo, el de respaldo se acomoda dentro. */
+  const sinLogoPropio = menu.logo_url === LOGO_MIMENU;
 
   // --- Dynamic Primary/Secondary Custom Colors ---
   const dynamicStyles = useMemo(() => {
@@ -513,12 +518,19 @@ export function MenuClient({ menu }: MenuClientProps) {
           <div className="relative h-full flex flex-col items-center justify-end text-center px-4 pb-8 pt-12">
             <div className="rounded-full bg-white border-4 border-primary overflow-hidden shadow-2xl flex items-center justify-center w-24 h-24 shrink-0 mb-3 transition-transform duration-300 hover:scale-105">
               {menu.logo_url && (
-                <Image 
-                  alt={menu.name} 
-                  width={96} 
-                  height={96} 
-                  className="object-cover aspect-square w-full h-full rounded-full" 
-                  src={menu.logo_url} 
+                <Image
+                  alt={menu.name}
+                  width={96}
+                  height={96}
+                  /* El logo del negocio llena el círculo; el de respaldo se
+                     acomoda dentro con aire. `object-cover` le cortaría los
+                     bordes a la marca de MiMENÚ y quedaría irreconocible. */
+                  className={
+                    sinLogoPropio
+                      ? "object-contain w-full h-full p-3.5"
+                      : "object-cover aspect-square w-full h-full rounded-full"
+                  }
+                  src={menu.logo_url}
                 />
               )}
             </div>
@@ -1276,7 +1288,17 @@ export function MenuClient({ menu }: MenuClientProps) {
               <div className="flex gap-4 items-center border-b border-outline/35 pb-5">
                 <div className="w-16 h-16 rounded-2xl bg-white border border-primary/20 overflow-hidden shadow-xs flex items-center justify-center shrink-0">
                   {menu.logo_url && (
-                    <Image alt={menu.name} width={64} height={64} className="object-cover aspect-square" src={menu.logo_url} />
+                    <Image
+                      alt={menu.name}
+                      width={64}
+                      height={64}
+                      className={
+                        sinLogoPropio
+                          ? "object-contain w-full h-full p-2.5"
+                          : "object-cover aspect-square"
+                      }
+                      src={menu.logo_url}
+                    />
                   )}
                 </div>
                 <div>

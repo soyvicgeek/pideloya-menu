@@ -2,6 +2,7 @@ import { cache } from "react";
 import { supabase } from "@/lib/supabase";
 import { buildHoursList, isOpenNow } from "@/lib/hours";
 import { resolverImagen } from "@/lib/media";
+import { LOGO_MIMENU } from "@/lib/site";
 import type {
   Category,
   HorizontalCategory,
@@ -201,7 +202,7 @@ export const getMenuBySlug = cache(async (slug: string): Promise<MenuData | null
     description: menuRow.description ?? "",
     primary_color: menuRow.primary_color ?? COLOR_MARCA,
     secondary_color: menuRow.secondary_color ?? "#743b8c",
-    logo_url: resolverImagen(menuRow.logo_path, menuRow.logo_url) ?? "",
+    logo_url: resolverImagen(menuRow.logo_path, menuRow.logo_url) ?? LOGO_MIMENU,
     banner_url: resolverImagen(menuRow.banner_path, menuRow.banner_url) ?? "",
     address: menuRow.address ?? "",
     whatsapp_phone: menuRow.whatsapp_phone ?? "",

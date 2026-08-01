@@ -15,6 +15,21 @@ export const SITE_URL = (
 export const SITE_NAME = "Pídelo Ya";
 
 /**
+ * El logo que se usa mientras el negocio no sube el suyo.
+ *
+ * El hueco del logo es un círculo con borde de color en mitad de la portada:
+ * dejarlo vacío se lee como una imagen que no cargó, no como algo pendiente.
+ * Con la marca de MiMENÚ el menú se ve terminado desde el primer día, que es
+ * justo lo que hace falta cuando el dueño lo comparte antes de acabar de
+ * armarlo.
+ *
+ * Vive aquí y no en `lib/menu.ts` porque lo usan tanto ese módulo como
+ * `MenuClient`, y ésos ya se referencian entre sí para los tipos. Este archivo
+ * no importa nada, así que nadie termina en un ciclo.
+ */
+export const LOGO_MIMENU = "/mimenu.svg";
+
+/**
  * Portada para redes sociales.
  *
  * Se usa en la landing y como respaldo cuando un negocio comparte su menú sin
