@@ -16,8 +16,10 @@ import {
 
 import { OG_IMAGE, REDES, SITE_NAME, SITE_URL } from "@/lib/site";
 import { getPlanesPublicos, PLANES_RESPALDO } from "@/lib/planes";
+import { getShowcaseBusinesses } from "@/lib/showcase";
 import { Hero } from "@/components/landing/Hero";
 import { Planes } from "@/components/landing/Planes";
+import { Showcase } from "@/components/landing/Showcase";
 import { SiteFooter, whatsappConMensaje } from "@/components/SiteFooter";
 
 const TITULO = "Mi Menú - Menú digital para tu negocio gratis!";
@@ -117,7 +119,11 @@ const difusion = [
 ];
 
 export default async function Home() {
-  const planesDeLaBase = await getPlanesPublicos();
+  const [planesDeLaBase, showcase] = await Promise.all([
+    getPlanesPublicos(),
+    getShowcaseBusinesses(),
+  ]);
+
   const planes = planesDeLaBase.length > 0 ? planesDeLaBase : PLANES_RESPALDO;
 
   return (
@@ -245,6 +251,34 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/*
+          Showcase: the businesses already inside.
+
+          It sits right before the pricing because it answers the doubt that
+          shows up at that point — "does anyone actually use this?". If nobody
+          is turned on in the CRM the whole section is skipped: an empty row
+          claiming there are businesses would be worse than saying nothing.
+
+          No `pb`: the `py-14` on the pricing section already gives the room
+          below.
+        */}
+        {showcase.length > 0 && (
+          <section className="px-5 pt-14">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="text-center font-display text-2xl font-black tracking-tight text-foreground">
+                Ellos ya forman parte de MiMENÚ
+              </h2>
+              <p className="mx-auto mt-2 max-w-md text-center text-sm font-medium text-foreground/50">
+                Estos negocios ya tienen su menú en línea.
+              </p>
+
+              <div className="mt-9">
+                <Showcase businesses={showcase} />
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Planes */}
         <section id="planes" className="scroll-mt-20 px-5 py-14">

@@ -611,6 +611,7 @@ export type Database = {
           banner_path: string | null
           giro_id: string | null
           logo_path: string | null
+          show_on_landing: boolean
           active: boolean
           address: string | null
           banner_url: string | null
@@ -638,6 +639,7 @@ export type Database = {
           banner_path?: string | null
           giro_id?: string | null
           logo_path?: string | null
+          show_on_landing?: boolean
           active?: boolean
           address?: string | null
           banner_url?: string | null
@@ -665,6 +667,7 @@ export type Database = {
           banner_path?: string | null
           giro_id?: string | null
           logo_path?: string | null
+          show_on_landing?: boolean
           active?: boolean
           address?: string | null
           banner_url?: string | null
