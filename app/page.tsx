@@ -11,7 +11,7 @@ import {
   QrCode,
   Smartphone,
   Store,
-  Video,
+  Share2,
 } from "lucide-react";
 
 import { OG_IMAGE, REDES, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -20,9 +20,9 @@ import { Hero } from "@/components/landing/Hero";
 import { Planes } from "@/components/landing/Planes";
 import { SiteFooter, whatsappConMensaje } from "@/components/SiteFooter";
 
-const TITULO = "Mi Menú -- Menú digital para tu negocio gratis!";
+const TITULO = "Mi Menú - Menú digital para tu negocio gratis!";
 const DESCRIPCION =
-  "Publica el menú de tu negocio en línea, gratis. Tu propia dirección, código QR y contacto por WhatsApp. Por De Cd Hidalgo Pal Mundo.";
+  "Publica el menú de tu negocio en línea, gratis. Tu propia dirección, código QR y contacto por WhatsApp - De Cd Hidalgo Pal Mundo.";
 
 export const metadata: Metadata = {
   title: TITULO,
@@ -99,10 +99,10 @@ const incluye = [
 
 const difusion = [
   {
-    Icon: Video,
-    titulo: "Reseña mensual en reel",
+    Icon: Share2,
+    titulo: "Conecta tus redes sociales",
     texto:
-      "Grabamos tu negocio y publicamos el reel en Facebook, Instagram, TikTok y en cdhidalgo.com/comer.",
+      "Tus clientes te siguen en Facebook, Instagram y TikTok. Nosotros los conectamos con tu menú.",
   },
   {
     Icon: MapPin,
@@ -112,7 +112,7 @@ const difusion = [
   {
     Icon: Megaphone,
     titulo: "Publicaciones en nuestras redes",
-    texto: "Dos veces por semana hablamos de tu negocio ante nuestra comunidad.",
+    texto: "Hablamos de tu negocio ante nuestra comunidad.",
   },
 ];
 
