@@ -64,6 +64,13 @@ export interface HorizontalCategory {
 }
 
 export interface MenuData {
+  /**
+   * El id del menú en la base. No se pinta en ningún lado: lo necesita la
+   * página para anotar la visita, que se registra por id y no por slug —un
+   * negocio puede cambiar su dirección pública cuando quiera y sus números no
+   * deberían partirse en dos.
+   */
+  id: string;
   name: string;
   description: string;
   primary_color: string;

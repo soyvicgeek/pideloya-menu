@@ -198,6 +198,7 @@ export const getMenuBySlug = cache(async (slug: string): Promise<MenuData | null
   const featured = rawItems.filter((item) => item.is_featured).map(mapItem);
 
   return {
+    id: menuRow.id,
     name: menuRow.name,
     description: menuRow.description ?? "",
     primary_color: menuRow.primary_color ?? COLOR_MARCA,

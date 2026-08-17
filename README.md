@@ -68,12 +68,32 @@ pnpm install
 #
 #    NEXT_PUBLIC_SUPABASE_URL=https://xsoftyalwgpudrymkclk.supabase.co
 #    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
+#    SUPABASE_SERVICE_ROLE_KEY=...        (sin NEXT_PUBLIC_, sólo servidor)
+#    MENU_VIEWS_SECRET=...                (ver abajo)
 
 # 3. Levantar el servidor de desarrollo
 pnpm dev
 ```
 
 Abre **http://localhost:3000/tacos-el-guero** para ver el menú de ejemplo.
+
+### Sobre `MENU_VIEWS_SECRET`
+
+Es la sal con la que se calcula la huella de cada visitante. Genérala una vez
+y no la cambies:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Sin ella el sitio funciona igual, sólo deja de contar visitas y lo avisa una
+vez en la terminal.
+
+Cambiarla no rompe nada, pero parte el historial: a partir de ese momento
+todos los visitantes se ven como gente nueva. Es el mismo efecto que tiene la
+rotación diaria, que sí es a propósito — la huella lleva la fecha dentro
+justamente para que nadie, nosotros incluidos, pueda seguir a una persona de
+un día para otro.
 
 ### Otros comandos
 

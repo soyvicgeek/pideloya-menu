@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { MenuClient } from "@/components/MenuClient";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getMenuBySlug } from "@/lib/menu";
 import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
+import { ipDeLosEncabezados, registrarVista } from "@/lib/vistas";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -81,6 +84,30 @@ export default async function MenuPage({ params }: PageProps) {
   const menu = await getMenuBySlug(slug);
 
   if (!menu) notFound();
+
+  /*
+   * La visita se anota después de mandar la página, no antes.
+   *
+   * Los encabezados se leen AQUÍ y los valores se pasan al callback, no se
+   * leen dentro: en un componente de servidor, `after()` corre fuera del ciclo
+   * de render de React y las APIs de petición —`headers`, `cookies`— ya no
+   * están disponibles ahí. Leerlas dentro truena.
+   *
+   * Si el registro falla, `registrarVista` se lo traga: el menú se ve igual.
+   * Una visita perdida cuesta mucho menos que una página caída.
+   */
+  const encabezados = await headers();
+  const visita = {
+    menuId: menu.id,
+    ip: ipDeLosEncabezados(
+      encabezados.get("x-forwarded-for"),
+      encabezados.get("x-real-ip"),
+    ),
+    userAgent: encabezados.get("user-agent") ?? "",
+    referer: encabezados.get("referer"),
+  };
+
+  after(() => registrarVista(visita));
 
   return (
     <>
