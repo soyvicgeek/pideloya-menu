@@ -1185,6 +1185,7 @@ export type Database = {
         Row: {
           active: boolean
           allow_social_links: boolean
+          allow_stats: boolean
           can_customize_brand: boolean
           created_at: string | null
           deleted_at: string | null
@@ -1200,6 +1201,7 @@ export type Database = {
         Insert: {
           active?: boolean
           allow_social_links?: boolean
+          allow_stats?: boolean
           can_customize_brand?: boolean
           created_at?: string | null
           deleted_at?: string | null
@@ -1215,6 +1217,7 @@ export type Database = {
         Update: {
           active?: boolean
           allow_social_links?: boolean
+          allow_stats?: boolean
           can_customize_brand?: boolean
           created_at?: string | null
           deleted_at?: string | null
@@ -1297,7 +1300,6 @@ export type Database = {
           logo_url: string | null
           name: string
           phone: string | null
-          plan_id: string | null
           primary_color: string | null
           secondary_color: string | null
           show_on_landing: boolean
@@ -1325,7 +1327,6 @@ export type Database = {
           logo_url?: string | null
           name: string
           phone?: string | null
-          plan_id?: string | null
           primary_color?: string | null
           secondary_color?: string | null
           show_on_landing?: boolean
@@ -1353,7 +1354,6 @@ export type Database = {
           logo_url?: string | null
           name?: string
           phone?: string | null
-          plan_id?: string | null
           primary_color?: string | null
           secondary_color?: string | null
           show_on_landing?: boolean
@@ -1376,17 +1376,46 @@ export type Database = {
             referencedRelation: "dchplm_menu_giros"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "dchplm_menus_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "dchplm_menu_subscription_plans"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
     Views: {
+      dchplm_menu_device_daily: {
+        Row: {
+          device: string | null
+          loads: number | null
+          menu_id: string | null
+          view_date: string | null
+          visits: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dchplm_menu_views_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "dchplm_menus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dchplm_menu_source_daily: {
+        Row: {
+          loads: number | null
+          menu_id: string | null
+          referrer_host: string | null
+          view_date: string | null
+          visits: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dchplm_menu_views_menu_id_fkey"
+            columns: ["menu_id"]
+            isOneToOne: false
+            referencedRelation: "dchplm_menus"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dchplm_menu_view_daily: {
         Row: {
           loads: number | null
@@ -1459,11 +1488,16 @@ export type Database = {
           menu_id: string
         }[]
       }
+      dchplm_menu_view_total: {
+        Args: { p_desde: string; p_menu_id: string }
+        Returns: number
+      }
       dchplm_plan_vigente: {
         Args: { p_client_id: string }
         Returns: {
           active: boolean
           allow_social_links: boolean
+          allow_stats: boolean
           can_customize_brand: boolean
           created_at: string | null
           deleted_at: string | null
